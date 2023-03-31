@@ -1,0 +1,32 @@
+Calibration file format
+Here is a sample calib.txt file:
+cam0=[1758.23 0 953.34; 0 1758.23 552.29; 0 0 1]
+cam1=[1758.23 0 953.34; 0 1758.23 552.29; 0 0 1]
+doffs=0
+baseline=111.53
+width=1920
+height=1080
+ndisp=290
+isint=0
+vmin=75
+vmax=262
+Explanation:
+
+cam0,1:        camera matrices for the rectified views, in the form [f 0 cx; 0 f cy; 0 0 1], where
+  f:           focal length in pixels
+  cx, cy:      principal point
+
+doffs:         x-difference of principal points, doffs = cx1 - cx0 (here always == 0)
+
+baseline:      camera baseline in mm
+
+width, height: image size
+
+ndisp:         a conservative bound on the number of disparity levels;
+               the stereo algorithm MAY utilize this bound and search from d = 0 .. ndisp-1
+
+vmin, vmax:    a tight bound on minimum and maximum disparities, used for color visualization;
+               the stereo algorithm MAY NOT utilize this information
+To convert from the floating-point disparity value d [pixels] in the .pfm file to depth Z [mm] the following equation can be used:
+Z = baseline * f / (d + doffs)
+Note that the image viewer "sv" and mesh viewer "plyv" provided by our software cvkit can read the calib.txt files and provide this conversion automatically when viewing .pfm disparity maps as 3D meshes.
